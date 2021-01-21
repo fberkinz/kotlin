@@ -1,6 +1,8 @@
 // !LANGUAGE: +FunctionTypesWithBigArity
+// IGNORE_BACKEND_FIR: JVM_IR
 // WITH_RUNTIME
 // TARGET_BACKEND: JVM
+// JVM_TARGET: 1.6
 // FILE: J.java
 
 // import kotlin.jvm.functions.Arity;
