@@ -28,9 +28,9 @@ import com.intellij.util.QueryExecutor
 import com.intellij.util.containers.ContainerUtil
 import org.jetbrains.kotlin.asJava.classes.KtLightClass
 import org.jetbrains.kotlin.asJava.elements.KtLightMethod
+import org.jetbrains.kotlin.asJava.toLightClass
 import org.jetbrains.kotlin.asJava.unwrapped
-import org.jetbrains.kotlin.idea.asJava.LightClassProvider.Companion.providedCreateKtFakeLightClass
-import org.jetbrains.kotlin.idea.asJava.LightClassProvider.Companion.providedToLightClass
+import org.jetbrains.kotlin.idea.caches.lightClasses.KtFakeLightClass
 import org.jetbrains.kotlin.idea.search.KotlinSearchUsagesSupport.Companion.actualsForExpected
 import org.jetbrains.kotlin.idea.search.KotlinSearchUsagesSupport.Companion.forEachOverridingMethod
 import org.jetbrains.kotlin.idea.search.KotlinSearchUsagesSupport.Companion.isExpectDeclaration
@@ -107,8 +107,8 @@ class KotlinDefinitionsSearcher : QueryExecutor<PsiElement, DefinitionsScopedSea
         }
 
         private fun processClassImplementations(klass: KtClass, consumer: Processor<PsiElement>): Boolean {
-            val psiClass = runReadAction { klass.providedToLightClass() ?: providedCreateKtFakeLightClass(klass) }
-                as? KtLightClass
+            val psiClass = runReadAction { klass.toLightClass() ?: KtFakeLightClass(klass) }
+                    as? KtLightClass
                 ?: return false //TODO Implement FIR support for not nullable providedCreateKtFakeLightClass
 
             val searchScope = runReadAction { psiClass.useScope }
